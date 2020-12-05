@@ -12,20 +12,23 @@ import time
 
 ##################################################
 
-num = 0
-
-name_file = ("f")
 
 
-url = input ("Enter the you youtube url")
+url = input ("Enter the you youtube url: \n\n")
 
-youtube = pytube.YouTube(url)
+path = input ("Enter the path where you want the youtube video to be saved")
+try:
+    youtube = pytube.YouTube(url)
 
-streams = youtube.streams.all()
+    streams = youtube.streams.all()
 
-video = youtube.streams.get_highest_resolution()
-video.download("C:/Users/sam/Desktop/python/Ascii")
-print ("Done!")
+    video = youtube.streams.get_highest_resolution()
+    video.download(path)
+    print ("Done!")
+
+except:
+
+    print ("\nYoutube video has coppyrighted material so it can not be downloaded. Try again with a different video")
 
 
 
@@ -36,7 +39,7 @@ print ("Done!")
 
 #locates all the files with the file exte
 
-for root, dirs, files in os.walk("C:/Users/sam/Desktop/python/Ascii"):
+for root, dirs, files in os.walk(path):
 
     for file in files:
         if file.endswith(".mp4"):
@@ -53,8 +56,10 @@ for root, dirs, files in os.walk("C:/Users/sam/Desktop/python/Ascii"):
 
 
 
-mp3_file = ("C:/Users/sam/Desktop/python/Ascii/audio.mp3")
-mp4_file = ("C:/Users/sam/Desktop/python/Ascii/"+file_name)
+mp3_file = (path+"\\")
+mp3_file = (mp3_file+"audio.mp3")
+mp4_file = (path+"\\")
+mp4_file = (mp4_file+file_name)
 
 VideoClip = VideoFileClip(mp4_file)
 audioclip = VideoClip.audio
@@ -64,9 +69,9 @@ audioclip.close()
 
 VideoClip.close()
 
-sound = AudioSegment.from_mp3("C:/Users/sam/Desktop/python/Ascii/audio.mp3")
+sound = AudioSegment.from_mp3(mp3_file)
 
-sound.export("C:/Users/sam/Desktop/python/Ascii/audio.wav", format = "wav")
+sound.export(path+"/audio.wav", format = "wav")
 
 
 
@@ -123,7 +128,7 @@ def a():
 
 def b():
     
-    winsound.PlaySound("C:/Users/sam/Desktop/python/Ascii/audio.wav",winsound.SND_FILENAME)
+    winsound.PlaySound(path+"/audio.wav",winsound.SND_FILENAME)
 
 
 ##################################################
@@ -133,7 +138,7 @@ def c ():
 
     os.remove (mp3_file)
     os.remove (mp4_file)
-    os.remove ("C:/Users/sam/Desktop/python/Ascii/audio.wav")
+    os.remove (path+"/audio.wav")
 
 
 threading.Thread(target=a).start()

@@ -6,6 +6,7 @@ import winsound
 from moviepy.editor import *
 from pydub import AudioSegment
 import threading
+import time
 
 
 
@@ -77,7 +78,7 @@ def a():
     # Ascii characters used to create the output 
     ASCII_CHARS = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
 
-    def resized_gray_image(image ,new_width=100):
+    def resized_gray_image(image ,new_width=70):
         width,height = image.size
         aspect_ratio = height/width
         new_height = int(aspect_ratio * new_width)
@@ -89,7 +90,7 @@ def a():
         characters = "".join([ASCII_CHARS[pixel//25] for pixel in pixels])
         return characters
 
-    def generate_frame(image,new_width=100):
+    def generate_frame(image,new_width=70):
         new_image_data = pix2chars(resized_gray_image(image))
 
         total_pixels = len(new_image_data)
@@ -104,18 +105,43 @@ def a():
 
     cap = cv2.VideoCapture(mp4_file)
     print (cap)
-    while True:
+    
+    try:    
+        while True:
 
-        ret,frame = cap.read()
-        cv2.imshow("frame",frame)
-        generate_frame(PIL.Image.fromarray(frame))
-        cv2.waitKey(15)
+            ret,frame = cap.read()
+            cv2.imshow("frame",frame)
+            generate_frame(PIL.Image.fromarray(frame))
+            cv2.waitKey(15)
+
+    except:
+
+        threading.Thread(target=c).start()
+
+
+##################################################
 
 def b():
     
     winsound.PlaySound("C:/Users/sam/Desktop/python/Ascii/audio.wav",winsound.SND_FILENAME)
 
+
+##################################################
+
+
+def c ():
+
+    os.remove (mp3_file)
+    os.remove (mp4_file)
+    os.remove ("C:/Users/sam/Desktop/python/Ascii/audio.wav")
+
+
 threading.Thread(target=a).start()
 
 threading.Thread(target=b).start()
+
+
+
+
+
     
